@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Box } from 'styles/Box';
+import { Searchbar } from 'components/Searchbar/Searchbar';
 
 export class App extends Component {
   render() {
@@ -8,13 +9,10 @@ export class App extends Component {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        p="ml"
-        m="0px auto"
-        backgroundColor="secondaryColorBlue"
         width="100%"
         height="100%"
       >
-        <h1>Hello world</h1>
+        <Searchbar onSubmit={console.log} />
       </Box>
     );
   }

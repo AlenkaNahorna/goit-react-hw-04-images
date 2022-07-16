@@ -1,4 +1,10 @@
 export const Globalstyles = {
+  html: {
+    boxSizing: 'border-box',
+    width: '100vw',
+    overflowX: ' hidden',
+  },
+
   body: {
     margin: '0',
     fontFamily:
@@ -16,6 +22,12 @@ export const Globalstyles = {
     padding: '0',
     margin: '0',
     listStyle: 'none',
+  },
+
+  img: {
+    display: 'block',
+    maxWidth: '100%',
+    height: 'auto',
   },
 
   h1: {
