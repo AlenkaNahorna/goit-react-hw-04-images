@@ -1,15 +1,21 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        fontSize: 32,
-        color: '#dd1919',
-        textAlign: 'center',
-      }}
-    >
-      goit-react-hw-03-image-finder
-      <div>please wait it is loading</div>
-    </div>
-  );
-};
+import React, { Component } from 'react';
+import { Box } from 'styles/Box';
+
+export class App extends Component {
+  render() {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        p="ml"
+        m="0px auto"
+        backgroundColor="secondaryColorBlue"
+        width="100%"
+        height="100%"
+      >
+        <h1>Hello world</h1>
+      </Box>
+    );
+  }
+}
