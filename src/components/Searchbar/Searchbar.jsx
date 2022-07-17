@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import {
   Header,
@@ -7,24 +8,36 @@ import {
 } from './Searchbar.styled';
 import { ImSearch } from 'react-icons/im';
 
-export const Searchbar = () => {
+export const Searchbar = ({ onSubmit }) => {
   return (
-    <Formik initialValues={{ query: '' }} onSubmit={val => console.log(val)}>
+    <Formik
+      initialValues={{ query: '' }}
+      onSubmit={values => {
+        onSubmit(values.query);
+      }}
+    >
       <Header>
-        <SearchForm>
-          <SearchFormButton type="submit">
-            <ImSearch size="20px" />
-          </SearchFormButton>
+        {props => (
+          <SearchForm>
+            <SearchFormButton type="submit">
+              <ImSearch size="20px" />
+            </SearchFormButton>
 
-          <SearchFormInput
-            type="text"
-            // onChange={props.handleChange}
-            // value={props.values.query}
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </SearchForm>
+            <SearchFormInput
+              name="query"
+              type="text"
+              onChange={props.handleChange}
+              value={props.values.query}
+              autoFocus
+              placeholder="Search images and photos"
+            />
+          </SearchForm>
+        )}
       </Header>
     </Formik>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
