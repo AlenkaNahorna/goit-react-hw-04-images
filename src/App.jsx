@@ -4,6 +4,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import { fetchImg, fetchImgOptions } from './api/fetchImg';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
+import { Loader } from 'components/Loader/Loader';
+import { UncorrectSearch } from 'components/UncorrectSearch/UncorrectSearch';
+import { Button } from 'components/Button/Button';
 
 export class App extends Component {
   state = {
@@ -72,14 +75,13 @@ export class App extends Component {
         height="100%"
       >
         <Searchbar onSubmit={this.handlerSearchbarSubmit} />
-        {status === 'idle' && <Idle />}
         {status === 'resolved' && totalHits === 0 && <UncorrectSearch />}
         {totalHits > 0 && <ImageGallery items={hits} />}
-        {status === 'loading' && <LoaderSpinner />}
+        {status === 'loading' && <Loader />}
         {totalHits > 12 && page !== lastPage && (
-          <PrimaryButton type="button" onClick={this.handlerLoadClick}>
+          <Button type="button" onClick={this.handlerLoadClick}>
             Load more
-          </PrimaryButton>
+          </Button>
         )}
 
         <ToastContainer

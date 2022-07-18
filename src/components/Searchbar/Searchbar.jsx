@@ -10,13 +10,13 @@ import { ImSearch } from 'react-icons/im';
 
 export const Searchbar = ({ onSubmit }) => {
   return (
-    <Formik
-      initialValues={{ query: '' }}
-      onSubmit={values => {
-        onSubmit(values.query);
-      }}
-    >
-      <Header>
+    <Header>
+      <Formik
+        initialValues={{ query: '' }}
+        onSubmit={values => {
+          onSubmit(values.query);
+        }}
+      >
         {props => (
           <SearchForm>
             <SearchFormButton type="submit">
@@ -33,8 +33,8 @@ export const Searchbar = ({ onSubmit }) => {
             />
           </SearchForm>
         )}
-      </Header>
-    </Formik>
+      </Formik>
+    </Header>
   );
 };
 

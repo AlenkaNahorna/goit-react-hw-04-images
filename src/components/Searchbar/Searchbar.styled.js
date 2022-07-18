@@ -25,7 +25,7 @@ export const SearchForm = styled(Form)`
   width: 100%;
   max-width: 500px;
   background-color: ${p => p.theme.colors.secondaryColor};
-  border-radius: 3px;
+  border-radius: ${p => p.theme.radii.small};
   overflow: hidden;
 `;
 
@@ -33,14 +33,14 @@ export const SearchFormInput = styled(Field)`
   display: inline-block;
   width: 100%;
   font: inherit;
-  font-size: 20px;
+  font-size: ${p => p.theme.fontSizes.l};
   border: none;
   outline: none;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: ${p => p.theme.space.m};
+  padding-right: ${p => p.theme.space.m};
   ::placeholder {
     font: inherit;
-    font-size: 14px;
+    font-size: ${p => p.theme.fontSizes.s};
   }
 `;
 
@@ -48,13 +48,13 @@ export const SearchFormButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 9px;
-  border: 0;
+  padding: ${p => p.theme.space.ml};
+  border: ${p => p.theme.radii.none};
   color: ${p => p.theme.colors.primaryColor};
   transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   outline: none;
   :hover {
-    color: ${p => p.theme.colors.blue};
+    color: ${p => p.theme.colors.secondaryColorBlue};
   }
 `;
