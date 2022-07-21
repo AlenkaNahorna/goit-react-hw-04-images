@@ -1,17 +1,6 @@
 import axios from 'axios';
+import { API_KEY, BASE_URL } from 'components/constants';
 import { toast } from 'react-toastify';
-
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '27696488-47cb76918e6b1b046fc57e4a0';
-
-export const fetchImgOptions = {
-  q: '',
-  image_type: 'photo',
-  orientation: 'horizontal',
-  safesearch: true,
-  per_page: 12,
-  page: 1,
-};
 
 const customAxios = axios.create({
   baseURL: `${BASE_URL}?key=${API_KEY}`,
@@ -19,7 +8,16 @@ const customAxios = axios.create({
 
 export const fetchImg = async params => {
   try {
-    return await customAxios.get('', { params });
+    return await customAxios.get('', {
+      params: {
+        ...params,
+        key: API_KEY,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        per_page: 12,
+      },
+    });
   } catch (error) {
     toast.error('Pixabay error!');
   }

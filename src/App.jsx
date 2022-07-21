@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Box } from 'styles/Box';
 import { ToastContainer, toast } from 'react-toastify';
 import { Searchbar } from 'components/Searchbar/Searchbar';
-import { fetchImg, fetchImgOptions } from './api/fetchImg';
+import { fetchImg } from './api/fetchImg';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Loader } from 'components/Loader/Loader';
 import { UncorrectSearch } from 'components/UncorrectSearch/UncorrectSearch';
@@ -19,13 +19,13 @@ export class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    const { page } = this.state;
+    const { page, q } = this.state;
     if (page !== 1 && prevState.page !== page) {
       this.setState({
         status: 'loading',
       });
-      fetchImgOptions.page = page;
-      fetchImg(fetchImgOptions).then(response => {
+
+      fetchImg({ page, q: q }).then(response => {
         this.setState(prevState => ({
           hits: [...prevState.hits, ...response.data.hits],
           status: 'resolved',
@@ -35,7 +35,7 @@ export class App extends Component {
   }
 
   handlerSearchbarSubmit = value => {
-    if (value.trim() === '') {
+    if (value.trim() === '' && this.state.q !== value) {
       toast.warn('Please, enter something!');
       return;
     } else {
@@ -45,8 +45,7 @@ export class App extends Component {
         page: 1,
       });
 
-      fetchImgOptions.q = value;
-      fetchImg(fetchImgOptions).then(response => {
+      fetchImg({ q: value, page: 1 }).then(response => {
         this.setState({
           lastPage: Math.ceil(response.data.totalHits / 12),
           hits: [...response.data.hits],
