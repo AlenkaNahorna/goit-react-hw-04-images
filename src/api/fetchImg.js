@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_KEY, BASE_URL } from 'components/constants';
+import { API_KEY, BASE_URL } from 'constants/constants';
 import { toast } from 'react-toastify';
 
 const customAxios = axios.create({
