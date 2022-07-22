@@ -11,7 +11,6 @@ export const fetchImg = async params => {
     return await customAxios.get('', {
       params: {
         ...params,
-        key: API_KEY,
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: true,

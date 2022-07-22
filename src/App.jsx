@@ -18,19 +18,29 @@ export class App extends Component {
     page: 1,
   };
 
-  componentDidUpdate(_, prevState) {
+  async componentDidUpdate(_, prevState) {
     const { page, q } = this.state;
     if (page !== 1 && prevState.page !== page) {
       this.setState({
         status: 'loading',
       });
-
-      fetchImg({ page, q: q }).then(response => {
-        this.setState(prevState => ({
-          hits: [...prevState.hits, ...response.data.hits],
-          status: 'resolved',
-        }));
-      });
+      try {
+        const { hits } = await fetchImg({ page, q });
+        if (page >= 1) {
+          this.setState(prevState => ({
+            hits: [...prevState.hits, ...hits],
+            status: 'resolved',
+          }));
+        }
+      } catch (error) {
+        this.setState({
+          totalHits: null,
+          hits: [],
+          status: 'rejected',
+          error,
+        });
+        toast.info(`Something went wrong ${error}`);
+      }
     }
   }
 
