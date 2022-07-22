@@ -25,7 +25,9 @@ export class App extends Component {
         status: 'loading',
       });
       try {
-        const { hits } = await fetchImg({ page, q });
+        const {
+          data: { hits },
+        } = await fetchImg({ page, q });
         if (page >= 1) {
           this.setState(prevState => ({
             hits: [...prevState.hits, ...hits],
@@ -44,25 +46,23 @@ export class App extends Component {
     }
   }
 
-  handlerSearchbarSubmit = value => {
-    if (value.trim() === '' && this.state.q !== value) {
-      toast.warn('Please, enter something!');
-      return;
-    } else {
-      this.setState({
-        status: 'loading',
-        q: value,
-        page: 1,
-      });
+  handlerSearchbarSubmit = async value => {
+    this.setState({
+      status: 'loading',
+      q: value,
+      page: 1,
+    });
 
-      fetchImg({ q: value, page: 1 }).then(response => {
-        this.setState({
-          lastPage: Math.ceil(response.data.totalHits / 12),
-          hits: [...response.data.hits],
-          totalHits: response.data.totalHits,
-          status: 'resolved',
-        });
+    try {
+      const responce = await fetchImg({ q: value, page: 1 });
+      this.setState({
+        lastPage: Math.ceil(responce.data.totalHits / 12),
+        hits: [...responce.data.hits],
+        totalHits: responce.data.totalHits,
+        status: 'resolved',
       });
+    } catch (e) {
+      toast.error(e);
     }
   };
 
