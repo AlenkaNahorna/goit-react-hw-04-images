@@ -8,7 +8,7 @@ export const Button = styled.button`
   text-align: center;
   text-transform: uppercase;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 700;
   font-size: ${p => p.theme.fontSizes.m};
   line-height: 24px;
   margin-bottom: ${p => p.theme.space.l};
