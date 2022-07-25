@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from 'styles/Box';
 import { ToastContainer, toast } from 'react-toastify';
 import { Searchbar } from 'components/Searchbar/Searchbar';
@@ -8,103 +8,82 @@ import { Loader } from 'components/Loader/Loader';
 import { UncorrectSearch } from 'components/UncorrectSearch/UncorrectSearch';
 import { Button } from 'components/Button/Button';
 
-export class App extends Component {
-  state = {
-    q: '',
-    hits: [],
-    totalHits: null,
-    status: 'idle',
-    lastPage: null,
-    page: 1,
-  };
+export function App() {
+  const [q, setQ] = useState('');
+  const [hits, setHits] = useState([]);
+  const [totalHits, setTotalHits] = useState(null);
+  const [status, setStatus] = useState('idle');
+  const [lastPage, setLastPage] = useState(null);
+  const [page, setPage] = useState(1);
 
-  async componentDidUpdate(_, prevState) {
-    const { page, q } = this.state;
-    if (page !== 1 && prevState.page !== page) {
-      this.setState({
-        status: 'loading',
-      });
+  useEffect(() => {
+    async function onFetch() {
       try {
         const {
           data: { hits },
         } = await fetchImg({ page, q });
         if (page >= 1) {
-          this.setState(prevState => ({
-            hits: [...prevState.hits, ...hits],
-            status: 'resolved',
-          }));
+          setHits(...hits);
+          setStatus('resolved');
         }
       } catch (error) {
-        this.setState({
-          totalHits: null,
-          hits: [],
-          status: 'rejected',
-          error,
-        });
+        setTotalHits(null);
+        setHits([]);
+        setStatus('rejected');
         toast.info(`Something went wrong ${error}`);
       }
     }
-  }
+    onFetch();
+  }, [page, q]);
 
-  handlerSearchbarSubmit = async value => {
-    this.setState({
-      status: 'loading',
-      q: value,
-      page: 1,
-    });
-
+  const handlerSearchbarSubmit = async value => {
+    setStatus('loading');
+    setQ(value);
+    setPage(1);
     try {
-      const responce = await fetchImg({ q: value, page: 1 });
-      this.setState({
-        lastPage: Math.ceil(responce.data.totalHits / 12),
-        hits: [...responce.data.hits],
-        totalHits: responce.data.totalHits,
-        status: 'resolved',
-      });
-    } catch (e) {
-      toast.error(e);
+      const responce = await fetchImg({ q, page });
+      setLastPage(Math.ceil(responce.data.totalHits / 12));
+      setHits([...responce.data.hits]);
+      setTotalHits(responce.data.totalHits);
+      setStatus('resolved');
+    } catch (error) {
+      toast.error(`Something went wrong ${error}`);
     }
   };
 
-  handlerLoadClick = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+  const handlerLoadClick = () => {
+    setPage(prevState => prevState.page + 1);
   };
 
-  render() {
-    const { page, lastPage, hits, totalHits, status } = this.state;
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      width="100%"
+      height="100%"
+    >
+      <Searchbar onSubmit={handlerSearchbarSubmit} />
+      {status === 'resolved' && totalHits === 0 && <UncorrectSearch />}
+      {totalHits > 0 && <ImageGallery items={hits} />}
+      {status === 'loading' && <Loader />}
+      {totalHits > 12 && page !== lastPage && (
+        <Button type="button" onClick={handlerLoadClick}>
+          Load more
+        </Button>
+      )}
 
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        width="100%"
-        height="100%"
-      >
-        <Searchbar onSubmit={this.handlerSearchbarSubmit} />
-        {status === 'resolved' && totalHits === 0 && <UncorrectSearch />}
-        {totalHits > 0 && <ImageGallery items={hits} />}
-        {status === 'loading' && <Loader />}
-        {totalHits > 12 && page !== lastPage && (
-          <Button type="button" onClick={this.handlerLoadClick}>
-            Load more
-          </Button>
-        )}
-
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Box>
-    );
-  }
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </Box>
+  );
 }
