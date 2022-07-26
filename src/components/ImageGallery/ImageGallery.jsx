@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { ImageGalleryList, ImageGalleryListItem } from './ImageGallery.styled';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 
@@ -15,6 +15,6 @@ export const ImageGallery = ({ items }) => {
   );
 };
 
-// ImageGallery.propTypes = {
-//   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-// };
+ImageGallery.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

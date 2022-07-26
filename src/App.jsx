@@ -20,11 +20,19 @@ export function App() {
     async function onFetch() {
       try {
         const {
-          data: { hits },
+          data: { hits, totalHits },
         } = await fetchImg({ page, q });
+
+        if (q === '') {
+          return;
+        }
+
         if (page >= 1) {
-          setHits(...hits);
+          setHits(prevHits => (page === 1 ? hits : [...prevHits, ...hits]));
+          setTotalHits(totalHits);
+          setLastPage(Math.ceil(totalHits / 12));
           setStatus('resolved');
+          console.log(hits);
         }
       } catch (error) {
         setTotalHits(null);
@@ -42,8 +50,9 @@ export function App() {
     setPage(1);
     try {
       const responce = await fetchImg({ q, page });
+      console.log(responce);
       setLastPage(Math.ceil(responce.data.totalHits / 12));
-      setHits([...responce.data.hits]);
+      setHits([responce.data.hits]);
       setTotalHits(responce.data.totalHits);
       setStatus('resolved');
     } catch (error) {
@@ -52,7 +61,7 @@ export function App() {
   };
 
   const handlerLoadClick = () => {
-    setPage(prevState => prevState.page + 1);
+    setPage(page + 1);
   };
 
   return (
