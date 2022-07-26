@@ -52,7 +52,7 @@ export function App() {
       const responce = await fetchImg({ q, page });
       console.log(responce);
       setLastPage(Math.ceil(responce.data.totalHits / 12));
-      setHits([responce.data.hits]);
+      setHits([...responce.data.hits]);
       setTotalHits(responce.data.totalHits);
       setStatus('resolved');
     } catch (error) {
